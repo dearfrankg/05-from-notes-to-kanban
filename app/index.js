@@ -16,12 +16,10 @@ const createStoreWithMiddleware = compose(
   DevTools.instrument()
 )(createStore);
 
-const initialState = storage.get('noteApp') || {}
+const APP_STORAGE = 'my_redux_kanban';
+const initialState = storage.get(APP_STORAGE) || {}
 const store = createStoreWithMiddleware(rootReducer, initialState)
-
-store.subscribe(() => {
-  storage.set('noteApp', store.getState())
-})
+store.subscribe(() => storage.set(APP_STORAGE, store.getState()))
 
 ReactDOM.render(
   <Provider store={store}>

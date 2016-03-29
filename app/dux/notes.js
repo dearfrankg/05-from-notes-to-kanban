@@ -8,8 +8,8 @@ import uuid from 'node-uuid';
 //////////////////////////////////
 // CONSTANTS
 //
-export const ADD_NOTE = 'ADD_NOTE'
-export const EDIT_NOTE = 'EDIT_NOTE'
+export const CREATE_NOTE = 'CREATE_NOTE'
+export const UPDATE_NOTE = 'UPDATE_NOTE'
 export const DELETE_NOTE = 'DELETE_NOTE'
 
 
@@ -20,8 +20,8 @@ function action(type, payload = {}) {
   return {type, ...payload}
 }
 
-export const addNote = () => action(ADD_NOTE, {note: {id: uuid.v4(), task: 'New Note'}})
-export const editNote = (id, task) => action(EDIT_NOTE, {id, task})
+export const createNote = () => action(CREATE_NOTE, {note: {id: uuid.v4(), task: 'New Note'}})
+export const updateNote = (params) => action(UPDATE_NOTE, {...params})
 export const deleteNote = id => action(DELETE_NOTE, {id})
 
 
@@ -30,13 +30,15 @@ export const deleteNote = id => action(DELETE_NOTE, {id})
 //
 export const notes = (state = [], action) => {
   switch(action.type) {
-    case ADD_NOTE:
+    case CREATE_NOTE:
       return [...state, action.note]
 
-    case EDIT_NOTE:
+    case UPDATE_NOTE:
       return state.map(note => {
         if (note.id === action.id) {
-          return {...note, task: action.task}
+          let payload = {...action}
+          delete payload.type
+          return {...note, ...payload}
         }
         return note
       })

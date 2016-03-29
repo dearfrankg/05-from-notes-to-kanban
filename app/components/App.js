@@ -1,19 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import Notes from './Notes';
-import { addNote } from '../dux/notes';
+import Lanes from './Lanes';
+import * as laneActions from '../dux/lanes';
 
-@connect(
-  (state) => ({
-    lanes: state.notes
-  })
-)
+@connect((state) => ({
+  allLanes: state.lanes
+}), {
+  ...laneActions
+})
 export default class App extends React.Component {
 
   render() {
+    const { allLanes, addLane } = this.props
+
     return (
       <div>
-        <Notes />
+        <button
+            className="add-lane"
+            onClick={addLane} >+</button>
+        <Lanes lanes={allLanes} />
       </div>
     )
   }
